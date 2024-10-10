@@ -15,6 +15,9 @@ def test_create_order():
 # Тест 2
 # В тесте возможность получения информации о заказе по его трек-номеру
 def test_get_order_info():
-    response = sender_stand_request.get_order(data.track_index)
+    order_body = data.new_order_data.copy()
+    response = sender_stand_request.post_new_order(order_body)
+    track_index = response.json()["track"]
+    response = sender_stand_request.get_order(track_index)
     assert response.status_code == 200
-    assert response.json()["order"]["track"] == data.track_index
+    assert response.json()["order"]["track"] == track_index
